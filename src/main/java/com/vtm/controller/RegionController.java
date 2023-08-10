@@ -1,6 +1,8 @@
 package com.vtm.controller;
 
 
+import com.vtm.dto.request.FleetAuthRequestDto;
+import com.vtm.dto.request.RegionAuthRequestDto;
 import com.vtm.dto.request.RegionCreateRequestDto;
 import com.vtm.dto.request.RegionUpdateRequestDto;
 import com.vtm.entity.Region;
@@ -33,5 +35,9 @@ public class RegionController {
     @DeleteMapping("/deletebyregionid")
     public ResponseEntity<Boolean> deleteByRegionId(Long regionId){
         return ResponseEntity.ok(regionService.deleteByRegionId(regionId));
+    }
+    @PutMapping("/addvehicletoregion")
+    public ResponseEntity<Boolean> addRegionToGroup(RegionAuthRequestDto dto){
+        return ResponseEntity.ok(regionService.addVehicleToRegion(dto));
     }
 }

@@ -1,8 +1,10 @@
 package com.vtm.controller;
 
 
+import com.vtm.dto.request.FleetAuthRequestDto;
 import com.vtm.dto.request.FleetCreateRequestDto;
 import com.vtm.dto.request.FleetUpdateRequestDto;
+import com.vtm.dto.request.GroupAuthRequestDto;
 import com.vtm.entity.Fleet;
 import com.vtm.service.FleetService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +33,10 @@ public class FleetController {
     @DeleteMapping("/deletebyfleetid")
     public ResponseEntity<Boolean> deleteByFleetId(Long fleetId){
         return ResponseEntity.ok(fleetService.deleteByFleetId(fleetId));
+    }
+
+    @PutMapping("/addvehicletofleet")
+    public ResponseEntity<Boolean> addVehicleToGroup(FleetAuthRequestDto dto){
+        return ResponseEntity.ok(fleetService.addVehicleToFleet(dto));
     }
 }
