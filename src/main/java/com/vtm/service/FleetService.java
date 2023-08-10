@@ -13,15 +13,19 @@ import java.util.Optional;
 @Service
 public class FleetService extends ServiceManager<Fleet, Long> {
     private final IFleetRepository repository;
+    private final CompanyService companyService;
 
-    public FleetService(IFleetRepository repository) {
+    public FleetService(IFleetRepository repository, CompanyService companyService) {
         super(repository);
         this.repository = repository;
+        this.companyService = companyService;
     }
 
     public Fleet createfleet(FleetCreateRequestDto dto) {
+        Company company = companyService.getByCompanyId(dto.getCompanyId());
         Fleet fleet = Fleet.builder()
                 .fleetName(dto.getFleetName())
+                .company(company)
                 .build();
         save(fleet);
         return fleet;

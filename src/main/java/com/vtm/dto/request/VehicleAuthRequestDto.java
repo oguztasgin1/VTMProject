@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegionCreateRequestDto {
+public class VehicleAuthRequestDto {
     Long companyId;
-    String regionName;
+    Long userId; //Hangi user' ı yetkilendireceksem onun userId'si.
+    Long vehicleId;
 }

@@ -4,6 +4,7 @@ package com.vtm.controller;
 import com.vtm.dto.request.RegionCreateRequestDto;
 import com.vtm.dto.request.RegionUpdateRequestDto;
 import com.vtm.entity.Region;
+import com.vtm.service.CompanyService;
 import com.vtm.service.RegionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

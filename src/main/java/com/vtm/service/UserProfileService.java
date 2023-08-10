@@ -41,7 +41,7 @@ public class UserProfileService extends ServiceManager<UserProfile, Long> {
 
 
     public boolean register(RegisterRequestDto dto) {
-        Company company = companyService.saveCompany(dto.getCompanyName());
+        Company company = companyService.getByCompanyId(dto.getCompanyId());
         UserProfile userProfile = UserProfile.builder()
                 .name(dto.getName())
                 .surname(dto.getSurname())

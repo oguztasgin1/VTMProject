@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegionCreateRequestDto {
+public class VehicleGetAllRequestDto {
     Long companyId;
-    String regionName;
+    Long userId;
 }

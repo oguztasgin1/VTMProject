@@ -1,6 +1,7 @@
 package com.vtm.controller;
 
 
+import com.vtm.dto.request.GroupAuthRequestDto;
 import com.vtm.dto.request.GroupCreateRequestDto;
 import com.vtm.dto.request.GroupUpdateRequestDto;
 import com.vtm.entity.Group;
@@ -31,5 +32,10 @@ public class GroupController {
     @DeleteMapping("/deletebygroupid")
     public ResponseEntity<Boolean> deleteByGroupId(Long groupId){
         return ResponseEntity.ok(groupService.deleteByGroupId(groupId));
+    }
+
+    @PutMapping("/addvehicletogroup")
+    public ResponseEntity<Boolean> addVehicleToGroup(GroupAuthRequestDto dto){
+        return ResponseEntity.ok(groupService.addVehicleToGroup(dto));
     }
 }

@@ -3,12 +3,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RegionCreateRequestDto {
-    Long companyId;
-    String regionName;
+public class GroupAuthRequestDto {
+    Long vehicleId;
+    Long groupId;
+
 }

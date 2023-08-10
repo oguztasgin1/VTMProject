@@ -30,4 +30,7 @@ public class Fleet extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

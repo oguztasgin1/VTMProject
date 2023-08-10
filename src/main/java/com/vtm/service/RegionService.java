@@ -2,7 +2,7 @@ package com.vtm.service;
 
 import com.vtm.dto.request.RegionCreateRequestDto;
 import com.vtm.dto.request.RegionUpdateRequestDto;
-import com.vtm.entity.Fleet;
+import com.vtm.entity.Company;
 import com.vtm.entity.Region;
 
 import com.vtm.repository.IRegionRepository;
@@ -14,15 +14,19 @@ import java.util.Optional;
 @Service
 public class RegionService extends ServiceManager<Region, Long> {
     private final IRegionRepository repository;
+    private final CompanyService companyService;
 
-    public RegionService(IRegionRepository repository) {
+    public RegionService(IRegionRepository repository, CompanyService companyService) {
         super(repository);
         this.repository = repository;
+        this.companyService = companyService;
     }
 
     public Region createRegion(RegionCreateRequestDto dto) {
+        Company company = companyService.getByCompanyId(dto.getCompanyId());
         Region region = Region.builder()
                 .regionName(dto.getRegionName())
+                .company(company)
                 .build();
         save(region);
         return region;
