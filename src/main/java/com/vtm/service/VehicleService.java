@@ -81,25 +81,22 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         return vehicle;
     }
 
-    public List<VehicleResponseDto> getAllVehicleByCompanyId(VehicleGetAllRequestDto dto) {
+    public List<VehicleResponseDto> getAllVehicleByCompanyIdAndUserId(VehicleGetAllRequestDto dto) {
         List<Vehicle> vehicleList = repository.findAllByCompanyIdAndUserProfileId(dto.getCompanyId(), dto.getUserId());
 
-        return vehicleList.stream().map(x -> {
-            return VehicleResponseDto.builder()
-                    .licensePlate(x.getLicensePlate())
-                    .chassisNumber(x.getChassisNumber())
-                    .label(x.getLabel())
-                    .brand(x.getBrand())
-                    .model(x.getModel())
-                    .modelYear(x.getModelYear())
-                    .companyName(x.getCompany().getCompanyName())
-                    .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
-                    .fleetName(x.getFleet().getFleetName())
-                    .regionName(x.getRegion().getRegionName())
-                    .groupName(x.getGroup().getGroupName())
-                    .build();
-        }).collect(Collectors.toList());
-
+        return vehicleList.stream().map(x -> VehicleResponseDto.builder()
+                .licensePlate(x.getLicensePlate())
+                .chassisNumber(x.getChassisNumber())
+                .label(x.getLabel())
+                .brand(x.getBrand())
+                .model(x.getModel())
+                .modelYear(x.getModelYear())
+                .companyName(x.getCompany().getCompanyName())
+                .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
+                .fleetName(x.getFleet().getFleetName())
+                .regionName(x.getRegion().getRegionName())
+                .groupName(x.getGroup().getGroupName())
+                .build()).collect(Collectors.toList());
     }
 
     public VehicleAuthResponseDto authVehicleByManager(VehicleAuthRequestDto dto) {
@@ -123,7 +120,26 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .model(vehicle.get().getModel())
                 .modelYear(vehicle.get().getModelYear())
                 .companyName(vehicle.get().getCompany().getCompanyName())
-                .userName(vehicle.get().getUserProfile().getName().concat("").concat(vehicle.get().getUserProfile().getSurname()))
+                .userName(vehicle.get().getUserProfile().getName().concat(" ").concat(vehicle.get().getUserProfile().getSurname()))
                 .build();
+    }
+
+    public List<VehicleResponseDto> getAllVehicleByCompanyId(Long companyId) {
+        List<Vehicle> vehicleList = repository.findAll();
+        List<Vehicle> vehicleCompanyList = vehicleList.stream().filter(x-> x.getCompany().getId().equals(companyId)).collect(Collectors.toList());
+
+        return vehicleCompanyList.stream().map(x -> VehicleResponseDto.builder()
+                .licensePlate(x.getLicensePlate())
+                .chassisNumber(x.getChassisNumber())
+                .label(x.getLabel())
+                .brand(x.getBrand())
+                .model(x.getModel())
+                .modelYear(x.getModelYear())
+                .companyName(x.getCompany().getCompanyName())
+                .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
+                .groupName(x.getGroup().getGroupName())
+                .fleetName(x.getFleet().getFleetName())
+                .regionName(x.getRegion().getRegionName())
+                .build()).collect(Collectors.toList());
     }
 }

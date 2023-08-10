@@ -9,6 +9,7 @@ import com.vtm.dto.response.VehicleAuthResponseDto;
 import com.vtm.dto.response.VehicleResponseDto;
 import com.vtm.entity.Vehicle;
 import com.vtm.service.VehicleService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleService.createVehicle(dto));
     }
 
-    @PostMapping("/getbyvehicleid")
+    @GetMapping("/getbyvehicleid")
     public ResponseEntity<Vehicle> getByVehicleId(Long vehicleId){
         return ResponseEntity.ok(vehicleService.getByVehicleId(vehicleId));
     }
@@ -40,15 +41,22 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleService.deleteByVehicleId(vehicleId));
     }
 
-    @GetMapping("/getallvehiclebycompanyid")
-    public ResponseEntity<List<VehicleResponseDto>> getAllVehicleByCompanyId(VehicleGetAllRequestDto dto){
-        return ResponseEntity.ok(vehicleService.getAllVehicleByCompanyId(dto));
+    @GetMapping("/getallvehiclebycompanyidanduserid")
+    @Operation(summary = "Bir Company' deki bir User' a atanmis butun Vehicle' ları CompanyId ve UserId ile getiren metot. #1X")
+    public ResponseEntity<List<VehicleResponseDto>> getAllVehicleByCompanyIdAndUserId(VehicleGetAllRequestDto dto){
+        return ResponseEntity.ok(vehicleService.getAllVehicleByCompanyIdAndUserId(dto));
+    }
+
+    @GetMapping("getallvehiclebycompanyid")
+    @Operation(summary = "Bir Company' deki butun Vehicle' ları CompanyId ile getiren metot. #1X")
+    public ResponseEntity<List<VehicleResponseDto>> getAllVehiclebyCompanyId(Long companyId){
+        return ResponseEntity.ok(vehicleService.getAllVehicleByCompanyId(companyId));
     }
 
     @PutMapping("/authvehiclebymanager")
+    @Operation(summary = "Bir Vehicle' ı bir User a atayan metot. #1X")
     public ResponseEntity<VehicleAuthResponseDto> authVehicleByManager(VehicleAuthRequestDto dto){
         return ResponseEntity.ok(vehicleService.authVehicleByManager(dto));
-
     }
 
 }
