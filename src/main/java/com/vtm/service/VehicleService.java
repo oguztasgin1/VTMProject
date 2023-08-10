@@ -8,15 +8,15 @@ import com.vtm.dto.request.VehicleUpdateRequestDto;
 
 import com.vtm.dto.response.VehicleAuthResponseDto;
 import com.vtm.dto.response.VehicleResponseDto;
-import com.vtm.entity.Company;
-import com.vtm.entity.UserProfile;
-import com.vtm.entity.Vehicle;
+import com.vtm.entity.*;
 import com.vtm.repository.IVehicleRepository;
 import com.vtm.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -142,4 +142,49 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .regionName(x.getRegion().getRegionName())
                 .build()).collect(Collectors.toList());
     }
+
+    public Boolean vehicleTreeByUserId(Long userId) {
+        UserProfile userProfile = userProfileService.getByUserId(userId);
+        List<Vehicle> vehicleList = repository.findAllByCompanyIdAndUserProfileId(userProfile.getCompany().getId(), userId);
+
+        Map<Region, List<Vehicle>> vehicleRegionMap = vehicleList.stream().collect(Collectors.groupingBy(Vehicle::getRegion));
+
+        Map<Region, Map<Fleet, List<Vehicle>>> groupedMap = new HashMap<>();
+
+        for (Map.Entry<Region, List<Vehicle>> entry : vehicleRegionMap.entrySet()) {
+            Region region = entry.getKey();
+            List<Vehicle> vehicles = entry.getValue();
+
+            Map<Fleet, List<Vehicle>> fleetVehicleMap = vehicles.stream()
+                    .collect(Collectors.groupingBy(Vehicle::getFleet));
+
+            groupedMap.put(region, fleetVehicleMap);
+        }
+
+        System.out.println(groupedMap);
+        printGroupedMap(groupedMap);
+
+        return true;
+    }
+
+    private void printGroupedMap(Map<Region, Map<Fleet, List<Vehicle>>> groupedMap) {
+        for (Map.Entry<Region, Map<Fleet, List<Vehicle>>> regionEntry : groupedMap.entrySet()) {
+            Region region = regionEntry.getKey();
+            System.out.println("Region: " + region.getRegionName());
+
+            Map<Fleet, List<Vehicle>> fleetVehicleMap = regionEntry.getValue();
+
+            for (Map.Entry<Fleet, List<Vehicle>> fleetEntry : fleetVehicleMap.entrySet()) {
+                Fleet fleet = fleetEntry.getKey();
+                System.out.println("  Fleet: " + fleet.getFleetName());
+
+                List<Vehicle> vehicles = fleetEntry.getValue();
+
+                for (Vehicle vehicle : vehicles) {
+                    System.out.println("    Vehicle: " + vehicle.getLicensePlate());
+                }
+            }
+        }
+    }
+
 }
