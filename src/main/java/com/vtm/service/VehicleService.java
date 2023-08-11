@@ -1,6 +1,7 @@
 package com.vtm.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vtm.dto.request.*;
 
 import com.vtm.dto.response.VehicleAuthResponseDto;
@@ -145,7 +146,7 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .build()).collect(Collectors.toList());
     }
 
-    public Boolean vehicleTreeByUserId(Long userId) {
+    public String vehicleTreeByUserId(Long userId) {
         UserProfile userProfile = userProfileService.getByUserId(userId);
         List<Vehicle> vehicleList = repository.findAllByCompanyIdAndUserProfileId(userProfile.getCompany().getId(), userId);
 
@@ -170,10 +171,15 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
             groupedMap.put(region, fleetGroupVehicleMap);
         }
 
-        System.out.println(groupedMap);
         printGroupedMap(groupedMap);
 
-        return true;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(groupedMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

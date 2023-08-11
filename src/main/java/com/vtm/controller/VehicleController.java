@@ -61,7 +61,7 @@ public class VehicleController {
 
     @GetMapping("/vehicletreebyuserid")
     @Operation(summary = "Kullanıcının görevli oldugu bölümleri ve o bölümlerdeki vahicle' ları getiren metot. #1X")
-    public ResponseEntity<Boolean> vehicleTreeByUserId(Long userId){
+    public ResponseEntity<String> vehicleTreeByUserId(Long userId){
         return ResponseEntity.ok(vehicleService.vehicleTreeByUserId(userId));
     }
 
