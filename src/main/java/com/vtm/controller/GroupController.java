@@ -35,11 +35,6 @@ public class GroupController {
         return ResponseEntity.ok(groupService.deleteByGroupId(groupId));
     }
 
-    @PutMapping("/addvehicletogroup")
-    public ResponseEntity<Boolean> addVehicleToGroup(GroupAuthRequestDto dto){
-        return ResponseEntity.ok(groupService.addVehicleToGroup(dto));
-    }
-
     @PutMapping("/assignmanagertogroup")
     public ResponseEntity<Boolean> assignManagerToGroup(GroupAssignManagerRequestDto dto){
         return ResponseEntity.ok(groupService.assignManagerToGroup(dto));

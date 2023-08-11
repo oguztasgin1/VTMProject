@@ -15,16 +15,14 @@ import java.util.Optional;
 public class GroupService extends ServiceManager<Group, Long> {
     private final IGroupRepository repository;
     private final CompanyService companyService;
-    private final VehicleService vehicleService;
     private final UserProfileService userProfileService;
     private final FleetService fleetService;
     private final RegionService regionService;
 
-    public GroupService(IGroupRepository repository, CompanyService companyService, VehicleService vehicleService, UserProfileService userProfileService, FleetService fleetService, RegionService regionService) {
+    public GroupService(IGroupRepository repository, CompanyService companyService, UserProfileService userProfileService, FleetService fleetService, RegionService regionService) {
         super(repository);
         this.repository = repository;
         this.companyService = companyService;
-        this.vehicleService = vehicleService;
         this.userProfileService = userProfileService;
         this.fleetService = fleetService;
         this.regionService = regionService;
@@ -70,25 +68,6 @@ public class GroupService extends ServiceManager<Group, Long> {
             System.out.println("Group bulunamadi");
         }
         delete(group.get());
-        return true;
-    }
-
-    public Boolean addVehicleToGroup(GroupAuthRequestDto dto) {
-        Vehicle vehicle = vehicleService.getByVehicleId(dto.getVehicleId());
-        if (vehicle.equals(null)){
-            System.out.println("Vehicle bulunamadi.");
-        }
-        Optional<Group> group = repository.findById(dto.getGroupId());
-        if (group.isEmpty()){
-            System.out.println("Group bulunamadi.");
-        }
-
-        UserProfile userProfile = userProfileService.getByUserId(group.get().getUserProfile().getId());
-        vehicle.setUserProfile(userProfile);
-        vehicleService.update(vehicle);
-
-        group.get().getVehicles().add(vehicle);
-        update(group.get());
         return true;
     }
 

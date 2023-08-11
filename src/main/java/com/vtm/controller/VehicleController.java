@@ -65,4 +65,10 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleService.vehicleTreeByUserId(userId));
     }
 
+    @PutMapping("zoneupdate")
+    @Operation(summary = "region,Fleet, Group ekleyen metot. #1X")
+    public ResponseEntity<Boolean> zoneUpdate(ZoneUpdateRequestDto dto){
+        return ResponseEntity.ok(vehicleService.zoneUpdate(dto));
+    }
+
 }

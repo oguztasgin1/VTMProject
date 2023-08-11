@@ -11,10 +11,7 @@ import com.vtm.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,11 +19,17 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
     private final IVehicleRepository repository;
     private final CompanyService companyService;
     private final UserProfileService userProfileService;
-    public VehicleService(IVehicleRepository repository, CompanyService companyService, UserProfileService userProfileService) {
+    private final RegionService regionService;
+    private final FleetService fleetService;
+    private final GroupService groupService;
+    public VehicleService(IVehicleRepository repository, CompanyService companyService, UserProfileService userProfileService, RegionService regionService, FleetService fleetService, GroupService groupService) {
         super(repository);
         this.repository = repository;
         this.companyService = companyService;
         this.userProfileService = userProfileService;
+        this.regionService = regionService;
+        this.fleetService = fleetService;
+        this.groupService = groupService;
     }
 
     public Vehicle getByVehicleId(Long vehicleId) {
@@ -74,7 +77,9 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .company(company)
                 .userProfile(userProfile)
                 .build();
+
         save(vehicle);
+
         return vehicle;
     }
 
@@ -90,9 +95,9 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .modelYear(x.getModelYear())
                 .companyName(x.getCompany().getCompanyName())
                 .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
-//                .fleetName(x.getFleet().getFleetName())
-//                .regionName(x.getRegion().getRegionName())
-//                .groupName(x.getGroup().getGroupName())
+                .fleetName(x.getFleet().getFleetName())
+                .regionName(x.getRegion().getRegionName())
+                .groupName(x.getGroup().getGroupName())
                 .build()).collect(Collectors.toList());
     }
 
@@ -134,9 +139,9 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .modelYear(x.getModelYear())
                 .companyName(x.getCompany().getCompanyName())
                 .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
-//                .groupName(x.getGroup().getGroupName())
-//                .fleetName(x.getFleet().getFleetName())
-//                .regionName(x.getRegion().getRegionName())
+                .groupName(x.getGroup().getGroupName())
+                .fleetName(x.getFleet().getFleetName())
+                .regionName(x.getRegion().getRegionName())
                 .build()).collect(Collectors.toList());
     }
 
@@ -146,16 +151,23 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
 
         Map<Region, List<Vehicle>> vehicleRegionMap = vehicleList.stream().collect(Collectors.groupingBy(Vehicle::getRegion));
 
-        Map<Region, Map<Fleet, List<Vehicle>>> groupedMap = new HashMap<>();
+        Map<Region, Map<Fleet, Map<Group, List<Vehicle>>>> groupedMap = new HashMap<>();
 
-        for (Map.Entry<Region, List<Vehicle>> entry : vehicleRegionMap.entrySet()) {
-            Region region = entry.getKey();
-            List<Vehicle> vehicles = entry.getValue();
+        for (Map.Entry<Region, List<Vehicle>> regionEntry : vehicleRegionMap.entrySet()) {
+            Region region = regionEntry.getKey();
+            List<Vehicle> vehicles = regionEntry.getValue();
 
-            Map<Fleet, List<Vehicle>> fleetVehicleMap = vehicles.stream()
-                    .collect(Collectors.groupingBy(Vehicle::getFleet));
+            Map<Fleet, Map<Group, List<Vehicle>>> fleetGroupVehicleMap = new HashMap<>();
+            for (Vehicle vehicle : vehicles) {
+                Fleet fleet = vehicle.getFleet();
+                Group group = vehicle.getGroup();
 
-            groupedMap.put(region, fleetVehicleMap);
+                fleetGroupVehicleMap.computeIfAbsent(fleet, k -> new HashMap<>())
+                        .computeIfAbsent(group, k -> new ArrayList<>())
+                        .add(vehicle);
+            }
+
+            groupedMap.put(region, fleetGroupVehicleMap);
         }
 
         System.out.println(groupedMap);
@@ -164,23 +176,47 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         return true;
     }
 
-    private void printGroupedMap(Map<Region, Map<Fleet, List<Vehicle>>> groupedMap) {
-        for (Map.Entry<Region, Map<Fleet, List<Vehicle>>> regionEntry : groupedMap.entrySet()) {
+
+    private void printGroupedMap(Map<Region, Map<Fleet, Map<Group, List<Vehicle>>>> groupedMap) {
+        for (Map.Entry<Region, Map<Fleet, Map<Group, List<Vehicle>>>> regionEntry : groupedMap.entrySet()) {
             Region region = regionEntry.getKey();
             System.out.println("Region: " + region.getRegionName());
 
-            Map<Fleet, List<Vehicle>> fleetVehicleMap = regionEntry.getValue();
+            Map<Fleet, Map<Group, List<Vehicle>>> fleetGroupVehicleMap = regionEntry.getValue();
 
-            for (Map.Entry<Fleet, List<Vehicle>> fleetEntry : fleetVehicleMap.entrySet()) {
+            for (Map.Entry<Fleet, Map<Group, List<Vehicle>>> fleetEntry : fleetGroupVehicleMap.entrySet()) {
                 Fleet fleet = fleetEntry.getKey();
                 System.out.println("  Fleet: " + fleet.getFleetName());
 
-                List<Vehicle> vehicles = fleetEntry.getValue();
+                Map<Group, List<Vehicle>> groupVehicleMap = fleetEntry.getValue();
 
-                for (Vehicle vehicle : vehicles) {
-                    System.out.println("    Vehicle: " + vehicle.getLicensePlate());
+                for (Map.Entry<Group, List<Vehicle>> groupEntry : groupVehicleMap.entrySet()) {
+                    Group group = groupEntry.getKey();
+                    System.out.println("    Group: " + group.getGroupName());
+
+                    List<Vehicle> vehicles = groupEntry.getValue();
+
+                    for (Vehicle vehicle : vehicles) {
+                        System.out.println("      Vehicle: " + vehicle.getLicensePlate());
+                    }
                 }
             }
         }
+    }
+
+
+    public Boolean zoneUpdate(ZoneUpdateRequestDto dto) {
+        Optional<Vehicle> vehicle = repository.findById(dto.getVehicleId());
+        if (vehicle.isEmpty()){
+            System.out.println("Vehicle bulunamadi.");
+        }
+        Region region = regionService.getByRegionId(dto.getRegionId());
+        Fleet fleet = fleetService.getByFleetId(dto.getFleetId());
+        Group group = groupService.getByGroupId(dto.getGroupId());
+        vehicle.get().setRegion(region);
+        vehicle.get().setFleet(fleet);
+        vehicle.get().setGroup(group);
+        update(vehicle.get());
+        return true;
     }
 }

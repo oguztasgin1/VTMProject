@@ -18,15 +18,13 @@ import java.util.stream.Collectors;
 public class RegionService extends ServiceManager<Region, Long> {
     private final IRegionRepository repository;
     private final CompanyService companyService;
-    private final VehicleService vehicleService;
     private final UserProfileService userProfileService;
 
 
-    public RegionService(IRegionRepository repository, CompanyService companyService, VehicleService vehicleService, UserProfileService userProfileService) {
+    public RegionService(IRegionRepository repository, CompanyService companyService, UserProfileService userProfileService) {
         super(repository);
         this.repository = repository;
         this.companyService = companyService;
-        this.vehicleService = vehicleService;
         this.userProfileService = userProfileService;
     }
 
@@ -64,26 +62,6 @@ public class RegionService extends ServiceManager<Region, Long> {
             System.out.println("Region bulunamadi");
         }
         delete(region.get());
-        return true;
-    }
-
-    public Boolean addVehicleToRegion(RegionAuthRequestDto dto) {
-        Vehicle vehicle = vehicleService.getByVehicleId(dto.getVehicleId());
-        if (vehicle.equals(null)){
-            System.out.println("Vehicle bulunamadi.");
-        }
-        Optional<Region> region = repository.findById(dto.getRegionId());
-        if (region.isEmpty()){
-            System.out.println("Region bulunamadi.");
-        }
-        region.get().getVehicles().add(vehicle);
-
-        UserProfile userProfile = userProfileService.getByUserId(region.get().getUserProfile().getId());
-        vehicle.setUserProfile(userProfile);
-        vehicleService.update(vehicle);
-
-        update(region.get());
-
         return true;
     }
 

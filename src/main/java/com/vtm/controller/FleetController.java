@@ -32,10 +32,6 @@ public class FleetController {
         return ResponseEntity.ok(fleetService.deleteByFleetId(fleetId));
     }
 
-    @PutMapping("/addvehicletofleet")
-    public ResponseEntity<Boolean> addVehicleToGroup(FleetAuthRequestDto dto){
-        return ResponseEntity.ok(fleetService.addVehicleToFleet(dto));
-    }
     @PutMapping("/assignmanagertofleet")
     public ResponseEntity<Boolean> assignManagerToFleet(FleetAssignManagerRequestDto dto){
         return ResponseEntity.ok(fleetService.assignManagerToFleet(dto));
