@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VehicleUpdateRequestDto {
     Long vehicleId;
-    Long licensePlate;
-    Long chassisNumber;
+    String licensePlate;
+    String chassisNumber;
     String label;
     String brand;
     String model;

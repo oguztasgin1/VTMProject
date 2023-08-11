@@ -1,12 +1,11 @@
 package com.vtm.controller;
 
-import com.vtm.dto.request.VehicleAuthRequestDto;
-import com.vtm.dto.request.VehicleCreateRequestDto;
-import com.vtm.dto.request.VehicleGetAllRequestDto;
-import com.vtm.dto.request.VehicleUpdateRequestDto;
+import com.vtm.dto.request.*;
 
 import com.vtm.dto.response.VehicleAuthResponseDto;
 import com.vtm.dto.response.VehicleResponseDto;
+import com.vtm.entity.Fleet;
+import com.vtm.entity.Region;
 import com.vtm.entity.Vehicle;
 import com.vtm.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/vehicle")
@@ -23,7 +23,7 @@ import java.util.List;
 public class VehicleController {
     private final VehicleService vehicleService;
     @PostMapping("/createvehicle")
-    public ResponseEntity<Vehicle> createVehicle(VehicleCreateRequestDto dto){
+    public ResponseEntity<Vehicle> createVehicle(@RequestBody VehicleCreateRequestDto dto){
         return ResponseEntity.ok(vehicleService.createVehicle(dto));
     }
 

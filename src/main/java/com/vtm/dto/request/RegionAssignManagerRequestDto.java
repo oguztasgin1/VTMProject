@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FleetCreateRequestDto {
-    Long companyId;
+public class RegionAssignManagerRequestDto {
+    Long userId;
     Long regionId;
-    String fleetName;
 }

@@ -1,5 +1,6 @@
 package com.vtm.service;
 
+import com.vtm.dto.request.RegionAssignManagerRequestDto;
 import com.vtm.dto.request.RegionAuthRequestDto;
 import com.vtm.dto.request.RegionCreateRequestDto;
 import com.vtm.dto.request.RegionUpdateRequestDto;
@@ -9,7 +10,9 @@ import com.vtm.repository.IRegionRepository;
 import com.vtm.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RegionService extends ServiceManager<Region, Long> {
@@ -17,6 +20,7 @@ public class RegionService extends ServiceManager<Region, Long> {
     private final CompanyService companyService;
     private final VehicleService vehicleService;
     private final UserProfileService userProfileService;
+
 
     public RegionService(IRegionRepository repository, CompanyService companyService, VehicleService vehicleService, UserProfileService userProfileService) {
         super(repository);
@@ -70,13 +74,31 @@ public class RegionService extends ServiceManager<Region, Long> {
         }
         Optional<Region> region = repository.findById(dto.getRegionId());
         if (region.isEmpty()){
-            System.out.println("Fleet bulunamadi.");
+            System.out.println("Region bulunamadi.");
         }
         region.get().getVehicles().add(vehicle);
-        update(region.get());
+
         UserProfile userProfile = userProfileService.getByUserId(region.get().getUserProfile().getId());
         vehicle.setUserProfile(userProfile);
         vehicleService.update(vehicle);
+
+        update(region.get());
+
+        return true;
+    }
+
+    public Boolean assignManagerToRegion(RegionAssignManagerRequestDto dto) {
+        UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
+        if (userProfile.equals(null)){
+            System.out.println("UserProfile bulunamadi.");
+        }
+        Optional<Region>  region = repository.findById(dto.getRegionId());
+        if (region.isEmpty()){
+            System.out.println("Region bulunamadi.");
+        }
+
+        region.get().setUserProfile(userProfile);
+        update(region.get());
         return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.vtm.controller;
 
 
+import com.vtm.dto.request.GroupAssignManagerRequestDto;
 import com.vtm.dto.request.GroupAuthRequestDto;
 import com.vtm.dto.request.GroupCreateRequestDto;
 import com.vtm.dto.request.GroupUpdateRequestDto;
@@ -37,5 +38,10 @@ public class GroupController {
     @PutMapping("/addvehicletogroup")
     public ResponseEntity<Boolean> addVehicleToGroup(GroupAuthRequestDto dto){
         return ResponseEntity.ok(groupService.addVehicleToGroup(dto));
+    }
+
+    @PutMapping("/assignmanagertogroup")
+    public ResponseEntity<Boolean> assignManagerToGroup(GroupAssignManagerRequestDto dto){
+        return ResponseEntity.ok(groupService.assignManagerToGroup(dto));
     }
 }

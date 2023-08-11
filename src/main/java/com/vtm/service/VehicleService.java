@@ -1,10 +1,7 @@
 package com.vtm.service;
 
 
-import com.vtm.dto.request.VehicleAuthRequestDto;
-import com.vtm.dto.request.VehicleCreateRequestDto;
-import com.vtm.dto.request.VehicleGetAllRequestDto;
-import com.vtm.dto.request.VehicleUpdateRequestDto;
+import com.vtm.dto.request.*;
 
 import com.vtm.dto.response.VehicleAuthResponseDto;
 import com.vtm.dto.response.VehicleResponseDto;
@@ -93,9 +90,9 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .modelYear(x.getModelYear())
                 .companyName(x.getCompany().getCompanyName())
                 .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
-                .fleetName(x.getFleet().getFleetName())
-                .regionName(x.getRegion().getRegionName())
-                .groupName(x.getGroup().getGroupName())
+//                .fleetName(x.getFleet().getFleetName())
+//                .regionName(x.getRegion().getRegionName())
+//                .groupName(x.getGroup().getGroupName())
                 .build()).collect(Collectors.toList());
     }
 
@@ -137,9 +134,9 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .modelYear(x.getModelYear())
                 .companyName(x.getCompany().getCompanyName())
                 .userName(x.getUserProfile().getName().concat(" ").concat(x.getUserProfile().getSurname()))
-                .groupName(x.getGroup().getGroupName())
-                .fleetName(x.getFleet().getFleetName())
-                .regionName(x.getRegion().getRegionName())
+//                .groupName(x.getGroup().getGroupName())
+//                .fleetName(x.getFleet().getFleetName())
+//                .regionName(x.getRegion().getRegionName())
                 .build()).collect(Collectors.toList());
     }
 
@@ -186,5 +183,4 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
             }
         }
     }
-
 }

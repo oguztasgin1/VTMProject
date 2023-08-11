@@ -20,8 +20,8 @@ public class Vehicle extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long licensePlate;
-    Long chassisNumber;
+    String licensePlate;
+    String chassisNumber;
     String label;
     String brand;
     String model;

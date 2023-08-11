@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class VehicleCreateRequestDto {
     Long companyId;
     Long userId;
-    Long licensePlate;
-    Long chassisNumber;
+    String licensePlate;
+    String chassisNumber;
     String label;
     String brand;
     String model;

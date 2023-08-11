@@ -1,10 +1,7 @@
 package com.vtm.controller;
 
 
-import com.vtm.dto.request.FleetAuthRequestDto;
-import com.vtm.dto.request.RegionAuthRequestDto;
-import com.vtm.dto.request.RegionCreateRequestDto;
-import com.vtm.dto.request.RegionUpdateRequestDto;
+import com.vtm.dto.request.*;
 import com.vtm.entity.Region;
 import com.vtm.service.CompanyService;
 import com.vtm.service.RegionService;
@@ -39,5 +36,10 @@ public class RegionController {
     @PutMapping("/addvehicletoregion")
     public ResponseEntity<Boolean> addRegionToGroup(RegionAuthRequestDto dto){
         return ResponseEntity.ok(regionService.addVehicleToRegion(dto));
+    }
+
+    @PutMapping("/assignmanagertoregion")
+    public ResponseEntity<Boolean> assignManagerToRegion(RegionAssignManagerRequestDto dto){
+        return ResponseEntity.ok(regionService.assignManagerToRegion(dto));
     }
 }

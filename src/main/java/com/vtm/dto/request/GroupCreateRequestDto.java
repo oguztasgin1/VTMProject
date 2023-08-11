@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupCreateRequestDto {
+    Long regionId;
     Long companyId;
+    Long fleetId;
     String groupName;
 }

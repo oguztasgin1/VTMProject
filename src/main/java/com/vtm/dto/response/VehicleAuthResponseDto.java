@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class VehicleAuthResponseDto {
-    Long licensePlate;
-    Long chassisNumber;
+    String licensePlate;
+    String chassisNumber;
     String label;
     String brand;
     String model;
