@@ -302,6 +302,12 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
             throw new VTMProjectException(EErrorType.VEHICLE_NOT_BE_FOUND);
         }
 
+        Long vehicleCompanyId = vehicle.get().getCompany().getId();
+        Optional<Long> tokenCompanyId = jwtTokenManager.getCompanyIdFromToken(token);
+        if (vehicleCompanyId != tokenCompanyId.get()){
+            throw new VTMProjectException(EErrorType.BAD_REQUEST_ERROR);
+        }
+
         Region region = regionService.getByRegionId(dto.getRegionId());
 
         Fleet fleet = fleetService.getByFleetId(dto.getFleetId());

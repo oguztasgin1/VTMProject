@@ -27,16 +27,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         this.repository = repository;
     }
 
-    public Company createCompany(CompanyCreateRequestDto dto,String token) {
-        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
-        if (userId.isEmpty()){
-            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
-        }
-        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
-        if (!(role.get().equals("MANAGER"))){
-            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
-        }
-
+    public Company createCompany(CompanyCreateRequestDto dto) {
         Company company = Company.builder()
                 .companyName(dto.getCompanyName())
                 .build();

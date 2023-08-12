@@ -83,4 +83,19 @@ public class JwtTokenManager {
             return Optional.empty();
         }
     }
+
+    public Optional<Long> getCompanyIdFromToken(String token){
+        try {
+            Algorithm algorithm=Algorithm.HMAC256(sifreAnahtari);
+            JWTVerifier verifier=JWT.require(algorithm).withIssuer("VTMProject").build();
+            DecodedJWT decodedJWT= verifier.verify(token);
+            if (decodedJWT==null){
+                return  Optional.empty();
+            }
+            return  Optional.of(decodedJWT.getClaim("companyId").asLong());
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return Optional.empty();
+        }
+    }
 }

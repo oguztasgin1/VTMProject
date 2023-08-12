@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class CompanyController {
     private final CompanyService companyService;
     @PostMapping("/createcompany")
-    public ResponseEntity<Company> createCompany(CompanyCreateRequestDto dto, String token){
-        return ResponseEntity.ok(companyService.createCompany(dto, token));
+    public ResponseEntity<Company> createCompany(CompanyCreateRequestDto dto){
+        return ResponseEntity.ok(companyService.createCompany(dto));
     }
 
     @PostMapping("/getbycompanyid")
