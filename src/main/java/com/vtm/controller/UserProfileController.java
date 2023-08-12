@@ -18,12 +18,12 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.getByUserId(userId));
     }
     @PutMapping("/updateuser")
-    public ResponseEntity<UserProfile> updateByUserId(@RequestBody UserUpdateRequestDto dto){
-        return ResponseEntity.ok(userProfileService.updateByUserId(dto));
+    public ResponseEntity<UserProfile> updateByUserId(@RequestBody UserUpdateRequestDto dto, String token){
+        return ResponseEntity.ok(userProfileService.updateByUserId(dto,token));
     }
 
     @DeleteMapping("/deletebyuserid")
-    public ResponseEntity<Boolean> deleteByUserId(Long userId){
-        return ResponseEntity.ok(userProfileService.deleteByUserId(userId));
+    public ResponseEntity<Boolean> deleteByUserId(Long userId, String token){
+        return ResponseEntity.ok(userProfileService.deleteByUserId(userId,token));
     }
 }

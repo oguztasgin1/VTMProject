@@ -60,11 +60,26 @@ public class JwtTokenManager {
         try{
             Algorithm algorithm = Algorithm.HMAC256(sifreAnahtari);
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("Java5").build();
+                    .withIssuer("VTMProject").build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if(decodedJWT==null) return Optional.empty();
             return Optional.of(decodedJWT.getClaim("id").asLong());
         }catch (Exception exception){
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> getRoleFromToken(String token){
+        try {
+            Algorithm algorithm=Algorithm.HMAC256(sifreAnahtari);
+            JWTVerifier verifier=JWT.require(algorithm).withIssuer("VTMProject").build();
+            DecodedJWT decodedJWT= verifier.verify(token);
+            if (decodedJWT==null){
+                return  Optional.empty();
+            }
+            return  Optional.of(decodedJWT.getClaim("role").asString());
+        }catch (Exception exception){
+            exception.printStackTrace();
             return Optional.empty();
         }
     }

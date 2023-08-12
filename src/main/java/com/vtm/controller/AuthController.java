@@ -26,9 +26,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     @Operation(summary = "Mail ve şifre ile giriş yapılmasını sağlayan metot. #0")
-    public ResponseEntity<Boolean> authenticate(@RequestBody @Valid LoginRequestDto request) {
+    public ResponseEntity<String> authenticate(@RequestBody @Valid LoginRequestDto request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
-
-
 }

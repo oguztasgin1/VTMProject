@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class GroupController {
     private final GroupService groupService;
     @PostMapping("/creategroup")
-    public ResponseEntity<Group> createGroup(GroupCreateRequestDto dto){
-        return ResponseEntity.ok(groupService.createGroup(dto));
+    public ResponseEntity<Group> createGroup(GroupCreateRequestDto dto, String token){
+        return ResponseEntity.ok(groupService.createGroup(dto, token));
     }
 
     @PostMapping("/getbygroupid")
@@ -26,13 +26,13 @@ public class GroupController {
         return ResponseEntity.ok(groupService.getByGroupId(groupId));
     }
     @PutMapping("/updategroup")
-    public ResponseEntity<Group> updateByGroupId(@RequestBody GroupUpdateRequestDto dto){
-        return ResponseEntity.ok(groupService.updateByGroupId(dto));
+    public ResponseEntity<Group> updateByGroupId(@RequestBody GroupUpdateRequestDto dto, String token){
+        return ResponseEntity.ok(groupService.updateByGroupId(dto, token));
     }
 
     @DeleteMapping("/deletebygroupid")
-    public ResponseEntity<Boolean> deleteByGroupId(Long groupId){
-        return ResponseEntity.ok(groupService.deleteByGroupId(groupId));
+    public ResponseEntity<Boolean> deleteByGroupId(Long groupId, String token){
+        return ResponseEntity.ok(groupService.deleteByGroupId(groupId, token));
     }
 
 }

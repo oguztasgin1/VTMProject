@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class FleetController {
     private final FleetService fleetService;
     @PostMapping("/createfleet")
-    public ResponseEntity<Fleet> createFleet(FleetCreateRequestDto dto){
-        return ResponseEntity.ok(fleetService.createfleet(dto));
+    public ResponseEntity<Fleet> createFleet(FleetCreateRequestDto dto, String token){
+        return ResponseEntity.ok(fleetService.createfleet(dto, token));
     }
 
     @PostMapping("/getbyfleetid")
@@ -23,12 +23,12 @@ public class FleetController {
         return ResponseEntity.ok(fleetService.getByFleetId(fleetId));
     }
     @PutMapping("/updatefleet")
-    public ResponseEntity<Fleet> updateByFleetId(@RequestBody FleetUpdateRequestDto dto){
-        return ResponseEntity.ok(fleetService.updateByFleetId(dto));
+    public ResponseEntity<Fleet> updateByFleetId(@RequestBody FleetUpdateRequestDto dto, String token){
+        return ResponseEntity.ok(fleetService.updateByFleetId(dto, token));
     }
 
     @DeleteMapping("/deletebyfleetid")
-    public ResponseEntity<Boolean> deleteByFleetId(Long fleetId){
-        return ResponseEntity.ok(fleetService.deleteByFleetId(fleetId));
+    public ResponseEntity<Boolean> deleteByFleetId(Long fleetId, String token){
+        return ResponseEntity.ok(fleetService.deleteByFleetId(fleetId, token));
     }
 }

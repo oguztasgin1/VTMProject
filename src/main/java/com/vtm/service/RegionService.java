@@ -4,6 +4,8 @@ import com.vtm.dto.request.RegionCreateRequestDto;
 import com.vtm.dto.request.RegionUpdateRequestDto;
 import com.vtm.entity.*;
 
+import com.vtm.exception.EErrorType;
+import com.vtm.exception.VTMProjectException;
 import com.vtm.repository.IRegionRepository;
 import com.vtm.utility.ServiceManager;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class RegionService extends ServiceManager<Region, Long> {
 
     public Region createRegion(RegionCreateRequestDto dto) {
         Company company = companyService.getByCompanyId(dto.getCompanyId());
+        if (company.equals(null)){
+            throw new VTMProjectException(EErrorType.COMPANY_NOT_BE_FOUND);
+        }
         Region region = Region.builder()
                 .regionName(dto.getRegionName())
                 .company(company)
@@ -37,7 +42,7 @@ public class RegionService extends ServiceManager<Region, Long> {
     public Region getByRegionId(Long regionId) {
         Optional<Region> region = repository.findById(regionId);
         if (region.isEmpty()){
-            System.out.println("Region bulunamadi");
+            throw new VTMProjectException(EErrorType.REGION_NOT_BE_FOUND);
         }
         return region.get();
     }
@@ -45,7 +50,7 @@ public class RegionService extends ServiceManager<Region, Long> {
     public Region updateByRegionId(RegionUpdateRequestDto dto) {
         Optional<Region> region = repository.findById(dto.getRegionId());
         if (region.isEmpty()){
-            System.out.println("Region bulunamadi");
+            throw new VTMProjectException(EErrorType.REGION_NOT_BE_FOUND);
         }
         region.get().setRegionName(dto.getRegionName());
         update(region.get());
@@ -55,7 +60,7 @@ public class RegionService extends ServiceManager<Region, Long> {
     public Boolean deleteByRegionId(Long regionId) {
         Optional<Region> region = repository.findById(regionId);
         if (region.isEmpty()){
-            System.out.println("Region bulunamadi");
+            throw new VTMProjectException(EErrorType.REGION_NOT_BE_FOUND);
         }
         delete(region.get());
         return true;

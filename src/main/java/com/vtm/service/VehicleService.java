@@ -10,8 +10,12 @@ import com.vtm.dto.response.treeResponse.FleetDto;
 import com.vtm.dto.response.treeResponse.GroupDto;
 import com.vtm.dto.response.treeResponse.VehicleTreeDto;
 import com.vtm.entity.*;
+import com.vtm.exception.EErrorType;
+import com.vtm.exception.VTMProjectException;
 import com.vtm.repository.IVehicleRepository;
+import com.vtm.utility.JwtTokenManager;
 import com.vtm.utility.ServiceManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -26,6 +30,8 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
     private final RegionService regionService;
     private final FleetService fleetService;
     private final GroupService groupService;
+    @Autowired
+    private JwtTokenManager jwtTokenManager;
     public VehicleService(IVehicleRepository repository, CompanyService companyService, UserProfileService userProfileService, RegionService regionService, FleetService fleetService, GroupService groupService) {
         super(repository);
         this.repository = repository;
@@ -44,10 +50,18 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         return vehicle.get();
     }
 
-    public Vehicle updateByVehicleId(VehicleUpdateRequestDto dto) {
+    public Vehicle updateByVehicleId(VehicleUpdateRequestDto dto, String token) {
+        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()){
+            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
+        }
+        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
+        if (!(role.get().equals("MANAGER"))){
+            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
+        }
         Optional<Vehicle> vehicle = repository.findById(dto.getVehicleId());
         if (vehicle.isEmpty()) {
-            System.out.println("Vehicle bulunamadi");
+            throw new VTMProjectException(EErrorType.VEHICLE_NOT_BE_FOUND);
         }
         vehicle.get().setBrand(dto.getBrand());
         vehicle.get().setChassisNumber(dto.getChassisNumber());
@@ -58,16 +72,32 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         return vehicle.get();
     }
 
-    public Boolean deleteByVehicleId(Long vehicleId) {
+    public Boolean deleteByVehicleId(Long vehicleId, String token) {
+        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()){
+            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
+        }
+        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
+        if (!(role.get().equals("MANAGER"))){
+            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
+        }
         Optional<Vehicle> vehicle = repository.findById(vehicleId);
         if (vehicle.isEmpty()){
-            System.out.println("Vehicle bulunamadi");
+            throw new VTMProjectException(EErrorType.VEHICLE_NOT_BE_FOUND);
         }
         delete(vehicle.get());
         return true;
     }
 
-    public Vehicle createVehicle(VehicleCreateRequestDto dto) {
+    public Vehicle createVehicle(VehicleCreateRequestDto dto, String token) {
+        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()){
+            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
+        }
+        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
+        if (!(role.get().equals("MANAGER"))){
+            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
+        }
         Company company = companyService.getByCompanyId(dto.getCompanyId());
         UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
 
@@ -105,15 +135,23 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .build()).collect(Collectors.toList());
     }
 
-    public VehicleAuthResponseDto authVehicleByManager(VehicleAuthRequestDto dto) {
+    public VehicleAuthResponseDto authVehicleByManager(VehicleAuthRequestDto dto, String token) {
+        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()){
+            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
+        }
+        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
+        if (!(role.get().equals("MANAGER"))){
+            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
+        }
         UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
 
         if (!(userProfile.getCompany().getId() == dto.getCompanyId())){
-            System.out.println("Kullanıcı o bu sikette degil!!");
+            throw new VTMProjectException(EErrorType.USER_NOT_IN_COMPANY);
         }
         Optional<Vehicle> vehicle = repository.findById(dto.getVehicleId());
         if (vehicle.isEmpty()){
-            System.out.println("Vehicle bulunamadi.");
+            throw new VTMProjectException(EErrorType.VEHICLE_NOT_BE_FOUND);
         }
         vehicle.get().setUserProfile(userProfile);
         update(vehicle.get());
@@ -250,10 +288,18 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         }
     }
 
-    public Boolean zoneUpdate(ZoneUpdateRequestDto dto) {
+    public Boolean zoneUpdate(ZoneUpdateRequestDto dto, String token) {
+        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()){
+            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
+        }
+        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
+        if (!(role.get().equals("MANAGER"))){
+            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
+        }
         Optional<Vehicle> vehicle = repository.findById(dto.getVehicleId());
         if (vehicle.isEmpty()){
-            System.out.println("Vehicle bulunamadi.");
+            throw new VTMProjectException(EErrorType.VEHICLE_NOT_BE_FOUND);
         }
 
         Region region = regionService.getByRegionId(dto.getRegionId());
@@ -269,7 +315,15 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         return true;
     }
 
-    public Boolean assignManagerToRegion(AssignUserToRegionRequestDto dto) {
+    public Boolean assignManagerToRegion(AssignUserToRegionRequestDto dto, String token) {
+        Optional<Long> userId = jwtTokenManager.getIdFromToken(token);
+        if (userId.isEmpty()){
+            throw new VTMProjectException(EErrorType.USER_NOT_BE_FOUND);
+        }
+        Optional<String> role = jwtTokenManager.getRoleFromToken(token);
+        if (!(role.get().equals("MANAGER"))){
+            throw new VTMProjectException(EErrorType.INVALID_TOKEN);
+        }
         List<Vehicle> vehicles = repository.findAllByRegionId(dto.getRegionId());
         UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
 

@@ -24,8 +24,8 @@ import java.util.Map;
 public class VehicleController {
     private final VehicleService vehicleService;
     @PostMapping("/createvehicle")
-    public ResponseEntity<Vehicle> createVehicle(@RequestBody VehicleCreateRequestDto dto){
-        return ResponseEntity.ok(vehicleService.createVehicle(dto));
+    public ResponseEntity<Vehicle> createVehicle(@RequestBody VehicleCreateRequestDto dto, String token){
+        return ResponseEntity.ok(vehicleService.createVehicle(dto, token));
     }
 
     @GetMapping("/getbyvehicleid")
@@ -33,13 +33,13 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleService.getByVehicleId(vehicleId));
     }
     @PutMapping("/updatevehicle")
-    public ResponseEntity<Vehicle> updateByVehicleId(@RequestBody VehicleUpdateRequestDto dto){
-        return ResponseEntity.ok(vehicleService.updateByVehicleId(dto));
+    public ResponseEntity<Vehicle> updateByVehicleId(@RequestBody VehicleUpdateRequestDto dto, String token){
+        return ResponseEntity.ok(vehicleService.updateByVehicleId(dto, token));
     }
 
     @DeleteMapping("/deletebyvehicleid")
-    public ResponseEntity<Boolean> deleteByVehicleId(Long vehicleId){
-        return ResponseEntity.ok(vehicleService.deleteByVehicleId(vehicleId));
+    public ResponseEntity<Boolean> deleteByVehicleId(Long vehicleId, String token){
+        return ResponseEntity.ok(vehicleService.deleteByVehicleId(vehicleId, token));
     }
 
     @GetMapping("/getallvehiclebycompanyidanduserid")
@@ -56,8 +56,8 @@ public class VehicleController {
 
     @PutMapping("/authvehiclebymanager")
     @Operation(summary = "Bir Vehicle' ı bir User a atayan metot. #1X")
-    public ResponseEntity<VehicleAuthResponseDto> authVehicleByManager(VehicleAuthRequestDto dto){
-        return ResponseEntity.ok(vehicleService.authVehicleByManager(dto));
+    public ResponseEntity<VehicleAuthResponseDto> authVehicleByManager(VehicleAuthRequestDto dto, String token){
+        return ResponseEntity.ok(vehicleService.authVehicleByManager(dto, token));
     }
 
     @GetMapping("/vehicletreebyuserid")
@@ -68,14 +68,14 @@ public class VehicleController {
 
     @PutMapping("zoneupdate")
     @Operation(summary = "Vehicle' a Region,Fleet, Group ekleyen metot. #1X")
-    public ResponseEntity<Boolean> zoneUpdate(ZoneUpdateRequestDto dto){
-        return ResponseEntity.ok(vehicleService.zoneUpdate(dto));
+    public ResponseEntity<Boolean> zoneUpdate(ZoneUpdateRequestDto dto, String token){
+        return ResponseEntity.ok(vehicleService.zoneUpdate(dto, token));
     }
 
     @PutMapping("/assignmanagertoregion")
     @Operation(summary = "Region a manager yetkilendiren metot ekleyen metot. #1X")
-    public ResponseEntity<Boolean> assignManagerToRegion(AssignUserToRegionRequestDto dto){
-        return ResponseEntity.ok(vehicleService.assignManagerToRegion(dto));
+    public ResponseEntity<Boolean> assignManagerToRegion(AssignUserToRegionRequestDto dto, String token){
+        return ResponseEntity.ok(vehicleService.assignManagerToRegion(dto, token));
     }
 
 }

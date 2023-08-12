@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class CompanyController {
     private final CompanyService companyService;
     @PostMapping("/createcompany")
-    public ResponseEntity<Company> createCompany(CompanyCreateRequestDto dto){
-        return ResponseEntity.ok(companyService.createCompany(dto));
+    public ResponseEntity<Company> createCompany(CompanyCreateRequestDto dto, String token){
+        return ResponseEntity.ok(companyService.createCompany(dto, token));
     }
 
     @PostMapping("/getbycompanyid")
@@ -23,12 +23,12 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getByCompanyId(companyId));
     }
     @PutMapping("/updatecompany")
-    public ResponseEntity<Company> updateByCompanyId(@RequestBody CompanyUpdateRequestDto dto){
-        return ResponseEntity.ok(companyService.updateByCompanyId(dto));
+    public ResponseEntity<Company> updateByCompanyId(@RequestBody CompanyUpdateRequestDto dto,String token){
+        return ResponseEntity.ok(companyService.updateByCompanyId(dto,token));
     }
 
     @DeleteMapping("/deletebycompanyid")
-    public ResponseEntity<Boolean> deleteByCompanyId(Long companyId){
-        return ResponseEntity.ok(companyService.deleteByCompanyId(companyId));
+    public ResponseEntity<Boolean> deleteByCompanyId(Long companyId,String token){
+        return ResponseEntity.ok(companyService.deleteByCompanyId(companyId,token));
     }
 }
