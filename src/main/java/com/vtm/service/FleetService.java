@@ -15,14 +15,12 @@ import java.util.Optional;
 public class FleetService extends ServiceManager<Fleet, Long> {
     private final IFleetRepository repository;
     private final CompanyService companyService;
-    private final UserProfileService userProfileService;
     private final RegionService regionService;
 
     public FleetService(IFleetRepository repository, CompanyService companyService, UserProfileService userProfileService, RegionService regionService) {
         super(repository);
         this.repository = repository;
         this.companyService = companyService;
-        this.userProfileService = userProfileService;
         this.regionService = regionService;
     }
 
@@ -63,21 +61,6 @@ public class FleetService extends ServiceManager<Fleet, Long> {
             System.out.println("Company bulunamadi");
         }
         delete(fleet.get());
-        return true;
-    }
-
-
-    public Boolean assignManagerToFleet(FleetAssignManagerRequestDto dto) {
-        UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
-        if (userProfile.equals(null)){
-            System.out.println("UserProfile bulunamadi.");
-        }
-        Optional<Fleet> fleet = repository.findById(dto.getFleetId());
-        if (fleet.isEmpty()){
-            System.out.println("Fleet bulunamadi.");
-        }
-        fleet.get().setUserProfile(userProfile);
-        update(fleet.get());
         return true;
     }
 }

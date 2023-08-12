@@ -31,9 +31,4 @@ public class FleetController {
     public ResponseEntity<Boolean> deleteByFleetId(Long fleetId){
         return ResponseEntity.ok(fleetService.deleteByFleetId(fleetId));
     }
-
-    @PutMapping("/assignmanagertofleet")
-    public ResponseEntity<Boolean> assignManagerToFleet(FleetAssignManagerRequestDto dto){
-        return ResponseEntity.ok(fleetService.assignManagerToFleet(dto));
-    }
 }

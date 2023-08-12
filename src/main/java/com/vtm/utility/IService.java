@@ -5,6 +5,7 @@ public interface IService <T,ID> {
     T save(T t);
     Iterable<T> saveAll(Iterable<T> t);
     T update(T t);
+    Iterable<T> updateAll(Iterable<T> t);
     void delete(T t);
     void deleteById(ID id);
     List<T> findAll();

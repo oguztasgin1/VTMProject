@@ -21,15 +21,15 @@ public class Region extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     String regionName;
-    @OneToMany(mappedBy = "region")
-    private Set<Fleet> fleets;
-    @OneToMany(mappedBy = "region")
-    private Set<Group> groups;
-    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Vehicle> vehicles;
-    @ManyToOne
-    @JoinColumn(name = "user_profile_id")
-    private UserProfile userProfile;
+//    @OneToMany(mappedBy = "region")
+//    private Set<Fleet> fleets;
+//    @OneToMany(mappedBy = "region")
+//    private Set<Group> groups;
+//    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Vehicle> vehicles;
+//    @ManyToOne
+//    @JoinColumn(name = "user_profile_id")
+//    private UserProfile userProfile;
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;

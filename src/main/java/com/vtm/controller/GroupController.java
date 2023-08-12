@@ -35,8 +35,4 @@ public class GroupController {
         return ResponseEntity.ok(groupService.deleteByGroupId(groupId));
     }
 
-    @PutMapping("/assignmanagertogroup")
-    public ResponseEntity<Boolean> assignManagerToGroup(GroupAssignManagerRequestDto dto){
-        return ResponseEntity.ok(groupService.assignManagerToGroup(dto));
-    }
 }

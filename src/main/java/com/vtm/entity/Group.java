@@ -21,17 +21,17 @@ public class Group extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     String groupName;
-    @OneToMany(mappedBy = "group")
-    private Set<Vehicle> vehicles;
+//    @OneToMany(mappedBy = "group")
+//    private Set<Vehicle> vehicles;
     @ManyToOne
     @JoinColumn(name = "fleet_id")
     private Fleet fleet;
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
-    @ManyToOne
-    @JoinColumn(name = "user_profile_id")
-    private UserProfile userProfile;
+//    @ManyToOne
+//    @JoinColumn(name = "user_profile_id")
+//    private UserProfile userProfile;
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;

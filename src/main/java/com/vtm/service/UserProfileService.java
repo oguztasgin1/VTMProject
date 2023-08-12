@@ -47,6 +47,7 @@ public class UserProfileService extends ServiceManager<UserProfile, Long> {
                 .surname(dto.getSurname())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
+                .phone(dto.getPhone())
                 .role(ERole.valueOf(dto.getRole()))
                 .company(company)
                 .build();

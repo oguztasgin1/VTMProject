@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegionAssignManagerRequestDto {
+public class AssignUserToRegionRequestDto {
     Long userId;
     Long regionId;
 }

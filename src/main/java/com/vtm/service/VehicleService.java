@@ -6,6 +6,9 @@ import com.vtm.dto.request.*;
 
 import com.vtm.dto.response.VehicleAuthResponseDto;
 import com.vtm.dto.response.VehicleResponseDto;
+import com.vtm.dto.response.treeResponse.FleetDto;
+import com.vtm.dto.response.treeResponse.GroupDto;
+import com.vtm.dto.response.treeResponse.VehicleTreeDto;
 import com.vtm.entity.*;
 import com.vtm.repository.IVehicleRepository;
 import com.vtm.utility.ServiceManager;
@@ -146,7 +149,7 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
                 .build()).collect(Collectors.toList());
     }
 
-    public String vehicleTreeByUserId(Long userId) {
+    public List<VehicleTreeDto> vehicleTreeByUserId(Long userId) {
         UserProfile userProfile = userProfileService.getByUserId(userId);
         List<Vehicle> vehicleList = repository.findAllByCompanyIdAndUserProfileId(userProfile.getCompany().getId(), userId);
 
@@ -173,15 +176,52 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
 
         printGroupedMap(groupedMap);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(groupedMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+
+        return convertToDto(groupedMap);
     }
 
+    public List<VehicleTreeDto> convertToDto(Map<Region, Map<Fleet, Map<Group, List<Vehicle>>>> groupedMap) {
+        List<VehicleTreeDto> vehicleTreeDtos = new ArrayList<>();
+
+        for (Map.Entry<Region, Map<Fleet, Map<Group, List<Vehicle>>>> regionEntry : groupedMap.entrySet()) {
+            Region region = regionEntry.getKey();
+            VehicleTreeDto regionDto = new VehicleTreeDto();
+            regionDto.setRegionName(region.getRegionName());
+
+            List<FleetDto> fleetDtos = new ArrayList<>();
+            Map<Fleet, Map<Group, List<Vehicle>>> fleetGroupVehicleMap = regionEntry.getValue();
+
+            for (Map.Entry<Fleet, Map<Group, List<Vehicle>>> fleetEntry : fleetGroupVehicleMap.entrySet()) {
+                Fleet fleet = fleetEntry.getKey();
+                FleetDto fleetDto = new FleetDto();
+                fleetDto.setFleetName(fleet.getFleetName());
+
+                List<GroupDto> groupDtos = new ArrayList<>();
+                Map<Group, List<Vehicle>> groupVehicleMap = fleetEntry.getValue();
+
+                for (Map.Entry<Group, List<Vehicle>> groupEntry : groupVehicleMap.entrySet()) {
+                    Group group = groupEntry.getKey();
+                    GroupDto groupDto = new GroupDto();
+                    groupDto.setGroupName(group.getGroupName());
+
+                    List<String> vehicleLicensePlates = groupEntry.getValue().stream()
+                            .map(Vehicle::getLicensePlate)
+                            .collect(Collectors.toList());
+
+                    groupDto.setVehicles(vehicleLicensePlates);
+                    groupDtos.add(groupDto);
+                }
+
+                fleetDto.setGroups(groupDtos);
+                fleetDtos.add(fleetDto);
+            }
+
+            regionDto.setFleets(fleetDtos);
+            vehicleTreeDtos.add(regionDto);
+        }
+
+        return vehicleTreeDtos;
+    }
 
     private void printGroupedMap(Map<Region, Map<Fleet, Map<Group, List<Vehicle>>>> groupedMap) {
         for (Map.Entry<Region, Map<Fleet, Map<Group, List<Vehicle>>>> regionEntry : groupedMap.entrySet()) {
@@ -210,19 +250,34 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         }
     }
 
-
     public Boolean zoneUpdate(ZoneUpdateRequestDto dto) {
         Optional<Vehicle> vehicle = repository.findById(dto.getVehicleId());
         if (vehicle.isEmpty()){
             System.out.println("Vehicle bulunamadi.");
         }
+
         Region region = regionService.getByRegionId(dto.getRegionId());
+
         Fleet fleet = fleetService.getByFleetId(dto.getFleetId());
+
         Group group = groupService.getByGroupId(dto.getGroupId());
+
         vehicle.get().setRegion(region);
         vehicle.get().setFleet(fleet);
         vehicle.get().setGroup(group);
         update(vehicle.get());
+        return true;
+    }
+
+    public Boolean assignManagerToRegion(AssignUserToRegionRequestDto dto) {
+        List<Vehicle> vehicles = repository.findAllByRegionId(dto.getRegionId());
+        UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
+
+        for (Vehicle vehicle: vehicles) {
+            vehicle.setUserProfile(userProfile);
+        }
+        saveAll(vehicles);
+
         return true;
     }
 }

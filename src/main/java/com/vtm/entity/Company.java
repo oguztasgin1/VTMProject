@@ -22,8 +22,8 @@ public class Company extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String companyName;
-    @OneToMany(mappedBy = "company")
-    Set<UserProfile> userProfileList;
+//    @OneToMany(mappedBy = "company")
+//    Set<UserProfile> userProfileList;
 //    @OneToMany(mappedBy = "company")
 //    Set<Vehicle> vehicleList;
 //    @OneToMany(mappedBy = "company")

@@ -4,6 +4,7 @@ import com.vtm.dto.request.*;
 
 import com.vtm.dto.response.VehicleAuthResponseDto;
 import com.vtm.dto.response.VehicleResponseDto;
+import com.vtm.dto.response.treeResponse.VehicleTreeDto;
 import com.vtm.entity.Fleet;
 import com.vtm.entity.Region;
 import com.vtm.entity.Vehicle;
@@ -61,14 +62,20 @@ public class VehicleController {
 
     @GetMapping("/vehicletreebyuserid")
     @Operation(summary = "Kullanıcının görevli oldugu bölümleri ve o bölümlerdeki vahicle' ları getiren metot. #1X")
-    public ResponseEntity<String> vehicleTreeByUserId(Long userId){
+    public ResponseEntity<List<VehicleTreeDto>> vehicleTreeByUserId(Long userId){
         return ResponseEntity.ok(vehicleService.vehicleTreeByUserId(userId));
     }
 
     @PutMapping("zoneupdate")
-    @Operation(summary = "region,Fleet, Group ekleyen metot. #1X")
+    @Operation(summary = "Vehicle' a Region,Fleet, Group ekleyen metot. #1X")
     public ResponseEntity<Boolean> zoneUpdate(ZoneUpdateRequestDto dto){
         return ResponseEntity.ok(vehicleService.zoneUpdate(dto));
+    }
+
+    @PutMapping("/assignmanagertoregion")
+    @Operation(summary = "Region a manager yetkilendiren metot ekleyen metot. #1X")
+    public ResponseEntity<Boolean> assignManagerToRegion(AssignUserToRegionRequestDto dto){
+        return ResponseEntity.ok(vehicleService.assignManagerToRegion(dto));
     }
 
 }

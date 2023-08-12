@@ -33,9 +33,4 @@ public class RegionController {
     public ResponseEntity<Boolean> deleteByRegionId(Long regionId){
         return ResponseEntity.ok(regionService.deleteByRegionId(regionId));
     }
-
-    @PutMapping("/assignmanagertoregion")
-    public ResponseEntity<Boolean> assignManagerToRegion(RegionAssignManagerRequestDto dto){
-        return ResponseEntity.ok(regionService.assignManagerToRegion(dto));
-    }
 }

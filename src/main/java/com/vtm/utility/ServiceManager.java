@@ -31,8 +31,15 @@ public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID>{
 
     @Override
     public T update(T t) {
-        t.setUpdatedate(System.currentTimeMillis());
+
         return repository.save(t);
+    }
+    @Override
+    public Iterable<T> updateAll(Iterable<T> t) {
+        t.forEach(x->{
+            x.setUpdatedate(System.currentTimeMillis());
+        });
+        return repository.saveAll(t);
     }
 
     @Override

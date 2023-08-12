@@ -15,15 +15,14 @@ import java.util.Optional;
 public class GroupService extends ServiceManager<Group, Long> {
     private final IGroupRepository repository;
     private final CompanyService companyService;
-    private final UserProfileService userProfileService;
+
     private final FleetService fleetService;
     private final RegionService regionService;
 
-    public GroupService(IGroupRepository repository, CompanyService companyService, UserProfileService userProfileService, FleetService fleetService, RegionService regionService) {
+    public GroupService(IGroupRepository repository, CompanyService companyService, FleetService fleetService, RegionService regionService) {
         super(repository);
         this.repository = repository;
         this.companyService = companyService;
-        this.userProfileService = userProfileService;
         this.fleetService = fleetService;
         this.regionService = regionService;
     }
@@ -71,17 +70,4 @@ public class GroupService extends ServiceManager<Group, Long> {
         return true;
     }
 
-    public Boolean assignManagerToGroup(GroupAssignManagerRequestDto dto) {
-        UserProfile userProfile = userProfileService.getByUserId(dto.getUserId());
-        if (userProfile.equals(null)){
-            System.out.println("UserProfile bulunamadi.");
-        }
-        Optional<Group> group = repository.findById(dto.getGroupId());
-        if (group.isEmpty()){
-            System.out.println("Group bulunamadi.");
-        }
-        group.get().setUserProfile(userProfile);
-        update(group.get());
-        return true;
-    }
 }
