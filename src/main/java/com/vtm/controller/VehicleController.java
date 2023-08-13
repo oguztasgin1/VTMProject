@@ -8,6 +8,7 @@ import com.vtm.dto.response.treeResponse.VehicleTreeDto;
 import com.vtm.entity.Fleet;
 import com.vtm.entity.Region;
 import com.vtm.entity.Vehicle;
+import com.vtm.entity.View.VehicleView;
 import com.vtm.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class VehicleController {
     }
 
     @GetMapping("/getbyvehicleid")
-    public ResponseEntity<Vehicle> getByVehicleId(Long vehicleId){
+    public ResponseEntity<VehicleView> getByVehicleId(Long vehicleId){
         return ResponseEntity.ok(vehicleService.getByVehicleId(vehicleId));
     }
     @PutMapping("/updatevehicle")

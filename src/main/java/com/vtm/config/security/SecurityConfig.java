@@ -26,9 +26,11 @@ public class SecurityConfig {
     JwtTokenFilter getJwtTokenFilter(){
         return new JwtTokenFilter();
     }
+
     private static final String[] WHITELIST = {
             "/auth/**",
             "/company/createcompany",
+            "/actuator/**",
             "/test",
             "/swagger-ui/**",
             "/swagger-ui.html",

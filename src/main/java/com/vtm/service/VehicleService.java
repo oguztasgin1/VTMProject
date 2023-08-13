@@ -10,6 +10,7 @@ import com.vtm.dto.response.treeResponse.FleetDto;
 import com.vtm.dto.response.treeResponse.GroupDto;
 import com.vtm.dto.response.treeResponse.VehicleTreeDto;
 import com.vtm.entity.*;
+import com.vtm.entity.View.VehicleView;
 import com.vtm.exception.EErrorType;
 import com.vtm.exception.VTMProjectException;
 import com.vtm.repository.IVehicleRepository;
@@ -42,12 +43,12 @@ public class VehicleService extends ServiceManager<Vehicle, Long> {
         this.groupService = groupService;
     }
 
-    public Vehicle getByVehicleId(Long vehicleId) {
-        Optional<Vehicle> vehicle = repository.findById(vehicleId);
-        if (vehicle.isEmpty()){
-            System.out.println("Vehicle bulunamadi");
+    public VehicleView getByVehicleId(Long vehicleId) {
+        VehicleView vehicle = repository.vehicleSpecialQuery(vehicleId);
+        if (vehicle.equals(null)){
+            throw new VTMProjectException(EErrorType.VEHICLE_NOT_BE_FOUND);
         }
-        return vehicle.get();
+        return vehicle;
     }
 
     public Vehicle updateByVehicleId(VehicleUpdateRequestDto dto, String token) {
