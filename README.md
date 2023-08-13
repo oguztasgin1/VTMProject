@@ -68,10 +68,12 @@ This project has been prepared with the aim of using some technologies and metho
 
 → Outputs
 ![TreeJson](https://res.cloudinary.com/doqksh0xh/image/upload/v1691928599/treeJson_lpsezo.png)
+
 ![TreeConsole](https://res.cloudinary.com/doqksh0xh/image/upload/v1691928636/treeConsole_e29pnm.png)
 
 # EndPoints
 → ALL PUT AND POST methods can only use the ADMIN and MANAGER roles.
+
 → STANDARD roles can use just GET methods in this application.
 ### Vehicle
 #### PUTS
@@ -155,4 +157,6 @@ This project has been prepared with the aim of using some technologies and metho
 
 [LOGIN](http://localhost:9090/swagger-ui/index.html#/auth-controller/authenticate#/)
 
-
+## What Did I Try To Do
+As I said before, this was a project that laid the foundations of an automobile tracking project and would give an idea to those who wanted it.
+Technologies used in the project (such as Security), architectural structure, validation examples, Data Transfer Objects and Views can serve as a cornerstone for those who want to do this project or a similar one.
