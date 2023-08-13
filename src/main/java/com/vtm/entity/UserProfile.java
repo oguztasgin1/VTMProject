@@ -28,15 +28,8 @@ public class UserProfile extends BaseEntity{
     String phone;
     @Enumerated(EnumType.STRING)
     private ERole role;
-//    @OneToMany(mappedBy = "userProfile")
-//    private Set<Vehicle> vehicles;
     @ManyToOne
     @JoinColumn(name = "company_id")
     Company company;
-//    @OneToMany(mappedBy = "userProfile")
-//    private Set<Group> groups;
-//    @OneToMany(mappedBy = "userProfile")
-//    private Set<Fleet> fleets;
-//    @OneToMany(mappedBy = "userProfile")
-//    private Set<Region> regions;
+
 }

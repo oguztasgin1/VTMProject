@@ -20,16 +20,9 @@ public class Fleet extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     String fleetName;
-//    @OneToMany(mappedBy = "fleet", cascade = CascadeType.ALL)
-//    private Set<Vehicle> vehicles;
-//    @OneToMany(mappedBy = "fleet", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Group> groups;
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
-//    @ManyToOne
-//    @JoinColumn(name = "user_profile_id")
-//    private UserProfile userProfile;
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;

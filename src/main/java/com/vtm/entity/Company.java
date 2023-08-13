@@ -22,14 +22,4 @@ public class Company extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String companyName;
-//    @OneToMany(mappedBy = "company")
-//    Set<UserProfile> userProfileList;
-//    @OneToMany(mappedBy = "company")
-//    Set<Vehicle> vehicleList;
-//    @OneToMany(mappedBy = "company")
-//    Set<Group> groups;
-//    @OneToMany(mappedBy = "company")
-//    Set<Fleet> fleets;
-//    @OneToMany(mappedBy = "company")
-//    Set<Region> regions;
 }
