@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .requestMatchers(WHITELIST)
                 .permitAll()
                 .requestMatchers(GREYLIST)
-                .hasAnyAuthority("STANDARD")
+                .hasAnyAuthority("STANDARD","ADMIN", "MANAGER")
                 .requestMatchers(BLACKLIST)
                 .hasAnyAuthority("ADMIN", "MANAGER")
                 .anyRequest()
