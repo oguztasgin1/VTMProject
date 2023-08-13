@@ -53,7 +53,7 @@ This project has been prepared with the aim of using some technologies and metho
 → We need RegionId, FleetId, GroupId and VehicleId to run this endpoint.
 → To crate them We can use these endpoints.s
 
-→ These features are interconnected. A group cannot be created without a fleet and a fleet without a region.  
+→ These features are interconnected. A group cannot be created without a fleet and a fleet cannot be created without a region.  
 
 → [CREATE REGION](http://localhost:9090/swagger-ui/index.html#/region-controller/createRegion#/)
 → [CREATE FLEET](http://localhost:9090/swagger-ui/index.html#/fleet-controller/createFleet#/)
